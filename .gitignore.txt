@@ -1,0 +1,28 @@
+# Build (Maven)
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Otros IDEs
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuración local / secretos
+application-local.yml
+application-local.properties
+*.env
