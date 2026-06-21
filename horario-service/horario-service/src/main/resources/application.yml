@@ -1,11 +1,11 @@
 server:
-  port: 8082
+  port: 8084
 
 spring:
   application:
-    name: usuario-service
+    name: horario-service
   datasource:
-    url: jdbc:mysql://localhost:3306/usuario_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/horario_db?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
     password: root
   jpa:

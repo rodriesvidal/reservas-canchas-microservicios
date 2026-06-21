@@ -73,4 +73,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .fechaRegistro(u.getFechaRegistro())
                 .build();
     }
+
+
 }

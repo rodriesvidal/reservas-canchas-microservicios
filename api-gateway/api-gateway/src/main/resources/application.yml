@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: usuario-service
+              uri: lb://usuario-service
+              predicates:
+                - Path=/usuarios/**
+            - id: cancha-service
+              uri: lb://cancha-service
+              predicates:
+                - Path=/canchas/**
+            - id: horario-service
+              uri: lb://horario-service
+              predicates:
+                - Path=/horarios/**
+            - id: pago-service
+              uri: lb://pago-service
+              predicates:
+                - Path=/pagos/**
+            - id: reserva-service
+              uri: lb://reserva-service
+              predicates:
+                - Path=/reservas/**
+            - id: auth-service
+              uri: lb://auth-service
+              predicates:
+                - Path=/auth/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+jwt:
+  secret: claveSecretaCanchasDeportivasDuocUC2026MuySeguraYLarga

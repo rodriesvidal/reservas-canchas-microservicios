@@ -1,14 +1,15 @@
 server:
-  port: 8082
+  port: 8083
 
 spring:
   application:
-    name: usuario-service
+    name: cancha-service
   datasource:
-    url: jdbc:mysql://localhost:3306/usuario_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/cancha_db?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
     password: root
   jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
       ddl-auto: update
     show-sql: true
