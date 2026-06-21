@@ -4,7 +4,9 @@ Arquitectura de microservicios para la gestión de reservas de canchas deportiva
 
 ## Integrantes del equipo
 
-- Rodrigo Vidal
+- Isaias Ignacio Collao Huerta
+- Mathias Ignacio Soto Vega
+- Rodrigo Esteban Vidal Urra
 
 ## Contexto del proyecto
 
