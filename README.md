@@ -79,7 +79,11 @@ cd cancha-service/cancha-service
 mvn spring-boot:run
 ```
 
-### Ejecutar pruebas unitarias
+### Ejecutar pruebas (unitarias + integración)
+
+Cada servicio incluye pruebas unitarias (Mockito, capa de servicio) y pruebas de integración
+(`*ControllerIntegrationTest`, levantan el contexto completo de Spring contra una base de datos
+H2 en memoria, sin necesidad de MySQL/XAMPP corriendo).
 
 ```bash
 # Desde la carpeta del servicio a testear
@@ -89,6 +93,15 @@ mvn test
 cd cancha-service/cancha-service
 mvn test
 ```
+
+## Documentación adicional (carpeta `docs/`)
+
+- **`docs/openapi/`**: especificación OpenAPI (JSON) exportada de cada microservicio. Se puede
+  importar directamente en Swagger Editor o Postman.
+- **`docs/postman/Reservas-Canchas-EP3.postman_collection.json`**: colección de Postman con las
+  42 peticiones del sistema (Auth, Usuarios, Canchas, Horarios, Reservas, Pagos), organizadas por
+  carpeta. Captura automáticamente tokens JWT e IDs creados mediante scripts de test, para poder
+  ejecutar el flujo completo de punta a punta sin copiar/pegar valores manualmente.
 
 ## Instrucciones de ejecución con Docker
 

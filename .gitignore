@@ -26,3 +26,7 @@ Thumbs.db
 application-local.yml
 application-local.properties
 *.env
+
+# Sincronización interna de la app Postman (no es parte del proyecto)
+docs/postman/.postman/
+docs/postman/postman/

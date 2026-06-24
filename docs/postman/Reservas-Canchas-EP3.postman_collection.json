@@ -1,0 +1,941 @@
+{
+  "info": {
+    "_postman_id": "7a4e2f10-3c2b-4d1a-9e6f-1b2c3d4e5f60",
+    "name": "Sistema de Reservas de Canchas Deportivas - EP3",
+    "description": "Colección completa para probar el sistema de microservicios a través del API Gateway (puerto 8080). Incluye Auth, Usuarios, Canchas, Horarios, Reservas y Pagos. Los tokens e IDs se capturan automáticamente en variables de colección al ejecutar las requests de creación/login.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080", "type": "string" },
+    { "key": "token_admin", "value": "", "type": "string" },
+    { "key": "token_propietario", "value": "", "type": "string" },
+    { "key": "token_cliente", "value": "", "type": "string" },
+    { "key": "id_usuario", "value": "", "type": "string" },
+    { "key": "id_cancha", "value": "", "type": "string" },
+    { "key": "id_horario", "value": "", "type": "string" },
+    { "key": "id_reserva", "value": "", "type": "string" },
+    { "key": "id_pago", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "01 - Auth",
+      "item": [
+        {
+          "name": "Registrar ADMIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('token_admin', pm.response.json().token);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Retorna token', () => pm.expect(pm.response.json().token).to.not.be.empty);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Admin Sistema\",\n  \"email\": \"admin@mail.com\",\n  \"password\": \"admin123\",\n  \"rol\": \"ADMIN\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar PROPIETARIO",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('token_propietario', pm.response.json().token);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Carlos Propietario\",\n  \"email\": \"carlos@mail.com\",\n  \"password\": \"clave123\",\n  \"rol\": \"PROPIETARIO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar CLIENTE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('token_cliente', pm.response.json().token);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Cliente\",\n  \"email\": \"juan@mail.com\",\n  \"password\": \"clave123\",\n  \"rol\": \"CLIENTE\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login PROPIETARIO",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.set('token_propietario', pm.response.json().token);",
+                  "}",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"carlos@mail.com\",\n  \"password\": \"clave123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login CLIENTE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.set('token_cliente', pm.response.json().token);",
+                  "}",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@mail.com\",\n  \"password\": \"clave123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login con password incorrecta (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@mail.com\",\n  \"password\": \"incorrecta\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Usuarios",
+      "item": [
+        {
+          "name": "Crear usuario (cliente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('id_usuario', pm.response.json().id);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Cliente\",\n  \"email\": \"juan@mail.com\",\n  \"telefono\": \"912345678\",\n  \"rol\": \"CLIENTE\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar usuarios",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_propietario}}" }],
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener usuario por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_propietario}}" }],
+            "url": {
+              "raw": "{{base_url}}/usuarios/{{id_usuario}}",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "{{id_usuario}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Cliente Actualizado\",\n  \"email\": \"juan@mail.com\",\n  \"telefono\": \"987654321\",\n  \"rol\": \"CLIENTE\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios/{{id_usuario}}",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "{{id_usuario}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar usuario (solo ADMIN, 403 si no)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
+            "url": {
+              "raw": "{{base_url}}/usuarios/{{id_usuario}}",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "{{id_usuario}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Canchas",
+      "item": [
+        {
+          "name": "Crear cancha (propietario)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('id_cancha', pm.response.json().id);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Estado por defecto DISPONIBLE', () => pm.expect(pm.response.json().estado).to.eql('DISPONIBLE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cancha Fútbol Norte\",\n  \"tipo\": \"FUTBOL\",\n  \"ubicacion\": \"Av. Siempre Viva 123\",\n  \"precioHora\": 15000,\n  \"idPropietario\": {{id_usuario}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/canchas",
+              "host": ["{{base_url}}"],
+              "path": ["canchas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cancha (cliente intenta - 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403 (solo PROPIETARIO puede crear)', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_cliente}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cancha Intento Cliente\",\n  \"tipo\": \"PADEL\",\n  \"ubicacion\": \"Calle Falsa 456\",\n  \"precioHora\": 12000,\n  \"idPropietario\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/canchas",
+              "host": ["{{base_url}}"],
+              "path": ["canchas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar canchas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/canchas",
+              "host": ["{{base_url}}"],
+              "path": ["canchas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener cancha por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/canchas/{{id_cancha}}",
+              "host": ["{{base_url}}"],
+              "path": ["canchas", "{{id_cancha}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar canchas por propietario",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_propietario}}" }],
+            "url": {
+              "raw": "{{base_url}}/canchas/propietario/{{id_usuario}}",
+              "host": ["{{base_url}}"],
+              "path": ["canchas", "propietario", "{{id_usuario}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar cancha",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cancha Fútbol Norte Renovada\",\n  \"tipo\": \"FUTBOL\",\n  \"ubicacion\": \"Av. Siempre Viva 123\",\n  \"precioHora\": 18000,\n  \"idPropietario\": {{id_usuario}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/canchas/{{id_cancha}}",
+              "host": ["{{base_url}}"],
+              "path": ["canchas", "{{id_cancha}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cancha",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_propietario}}" }],
+            "url": {
+              "raw": "{{base_url}}/canchas/{{id_cancha}}",
+              "host": ["{{base_url}}"],
+              "path": ["canchas", "{{id_cancha}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Horarios",
+      "item": [
+        {
+          "name": "Crear horario (propietario)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('id_horario', pm.response.json().id);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Disponible por defecto', () => pm.expect(pm.response.json().disponible).to.eql(true));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCancha\": {{id_cancha}},\n  \"fecha\": \"2026-07-15\",\n  \"horaInicio\": \"10:00:00\",\n  \"horaFin\": \"11:00:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/horarios",
+              "host": ["{{base_url}}"],
+              "path": ["horarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear horario con horaFin antes de horaInicio (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCancha\": {{id_cancha}},\n  \"fecha\": \"2026-07-15\",\n  \"horaInicio\": \"15:00:00\",\n  \"horaFin\": \"14:00:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/horarios",
+              "host": ["{{base_url}}"],
+              "path": ["horarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar horarios",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": { "raw": "{{base_url}}/horarios", "host": ["{{base_url}}"], "path": ["horarios"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener horario por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/horarios/{{id_horario}}",
+              "host": ["{{base_url}}"],
+              "path": ["horarios", "{{id_horario}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar horarios por cancha",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/horarios/cancha/{{id_cancha}}",
+              "host": ["{{base_url}}"],
+              "path": ["horarios", "cancha", "{{id_cancha}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar horarios disponibles por cancha",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/horarios/cancha/{{id_cancha}}/disponibles",
+              "host": ["{{base_url}}"],
+              "path": ["horarios", "cancha", "{{id_cancha}}", "disponibles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar disponibilidad de horario",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_propietario}}" }],
+            "url": {
+              "raw": "{{base_url}}/horarios/{{id_horario}}/disponibilidad?disponible=false",
+              "host": ["{{base_url}}"],
+              "path": ["horarios", "{{id_horario}}", "disponibilidad"],
+              "query": [{ "key": "disponible", "value": "false" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar horario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCancha\": {{id_cancha}},\n  \"fecha\": \"2026-07-16\",\n  \"horaInicio\": \"09:00:00\",\n  \"horaFin\": \"10:00:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/horarios/{{id_horario}}",
+              "host": ["{{base_url}}"],
+              "path": ["horarios", "{{id_horario}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar horario",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_propietario}}" }],
+            "url": {
+              "raw": "{{base_url}}/horarios/{{id_horario}}",
+              "host": ["{{base_url}}"],
+              "path": ["horarios", "{{id_horario}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Reservas",
+      "item": [
+        {
+          "name": "Crear reserva (cliente) - orquesta 4 servicios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('id_reserva', pm.response.json().id);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Estado CONFIRMADA', () => pm.expect(pm.response.json().estado).to.eql('CONFIRMADA'));",
+                  "pm.test('Tiene idPago asociado', () => pm.expect(pm.response.json().idPago).to.not.be.null);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_cliente}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCliente\": {{id_usuario}},\n  \"idCancha\": {{id_cancha}},\n  \"idHorario\": {{id_horario}},\n  \"metodoPago\": \"EFECTIVO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas",
+              "host": ["{{base_url}}"],
+              "path": ["reservas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear reserva (propietario intenta - 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403 (solo CLIENTE puede reservar)', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_propietario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCliente\": {{id_usuario}},\n  \"idCancha\": {{id_cancha}},\n  \"idHorario\": {{id_horario}},\n  \"metodoPago\": \"EFECTIVO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas",
+              "host": ["{{base_url}}"],
+              "path": ["reservas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear reserva sin token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCliente\": {{id_usuario}},\n  \"idCancha\": {{id_cancha}},\n  \"idHorario\": {{id_horario}},\n  \"metodoPago\": \"EFECTIVO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/reservas",
+              "host": ["{{base_url}}"],
+              "path": ["reservas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar reservas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_propietario}}" }],
+            "url": { "raw": "{{base_url}}/reservas", "host": ["{{base_url}}"], "path": ["reservas"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener reserva por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/reservas/{{id_reserva}}",
+              "host": ["{{base_url}}"],
+              "path": ["reservas", "{{id_reserva}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar reservas por cliente",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/reservas/cliente/{{id_usuario}}",
+              "host": ["{{base_url}}"],
+              "path": ["reservas", "cliente", "{{id_usuario}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar reserva (libera el horario)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Estado CANCELADA', () => pm.expect(pm.response.json().estado).to.eql('CANCELADA'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/reservas/{{id_reserva}}/cancelar",
+              "host": ["{{base_url}}"],
+              "path": ["reservas", "{{id_reserva}}", "cancelar"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - Pagos",
+      "item": [
+        {
+          "name": "Crear pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('id_pago', pm.response.json().id);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Estado PENDIENTE', () => pm.expect(pm.response.json().estado).to.eql('PENDIENTE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_cliente}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idReserva\": {{id_reserva}},\n  \"monto\": 15000,\n  \"metodoPago\": \"EFECTIVO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/pagos",
+              "host": ["{{base_url}}"],
+              "path": ["pagos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pagos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
+            "url": { "raw": "{{base_url}}/pagos", "host": ["{{base_url}}"], "path": ["pagos"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener pago por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/pagos/{{id_pago}}",
+              "host": ["{{base_url}}"],
+              "path": ["pagos", "{{id_pago}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pagos por reserva",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+            "url": {
+              "raw": "{{base_url}}/pagos/reserva/{{id_reserva}}",
+              "host": ["{{base_url}}"],
+              "path": ["pagos", "reserva", "{{id_reserva}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirmar pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Estado PAGADO', () => pm.expect(pm.response.json().estado).to.eql('PAGADO'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
+            "url": {
+              "raw": "{{base_url}}/pagos/{{id_pago}}/confirmar",
+              "host": ["{{base_url}}"],
+              "path": ["pagos", "{{id_pago}}", "confirmar"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rechazar pago",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
+            "url": {
+              "raw": "{{base_url}}/pagos/{{id_pago}}/rechazar",
+              "host": ["{{base_url}}"],
+              "path": ["pagos", "{{id_pago}}", "rechazar"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar pago",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_admin}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idReserva\": {{id_reserva}},\n  \"monto\": 16000,\n  \"metodoPago\": \"TARJETA\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/pagos/{{id_pago}}",
+              "host": ["{{base_url}}"],
+              "path": ["pagos", "{{id_pago}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar pago",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
+            "url": {
+              "raw": "{{base_url}}/pagos/{{id_pago}}",
+              "host": ["{{base_url}}"],
+              "path": ["pagos", "{{id_pago}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
